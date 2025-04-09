@@ -1,0 +1,35 @@
+services:
+  reserveapp:
+    build: .
+    container_name: reserveapp
+    command: uvicorn app.main:app --port 5050
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 5050:5050
+    depends_on:
+      -   reserveappdb
+
+  reserveappdb:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: reserveapp
+      POSTGRES_PASSWORD: reserveapp
+      POSTGRES_DB: reserveapp
+    container_name: reserveappdb
+    volumes:
+      - reserveappdbdata:/var/lib/postgresql/data/
+
+
+  test_runner:
+    build: .
+    container_name: test_runner
+    command: pytest tests/
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - reserveapp
+      - reserveappdb
+volumes:
+  reserveappdbdata: null
