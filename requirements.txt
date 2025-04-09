@@ -7,6 +7,3 @@ pydantic_settings
 httpx
 pytest
 pytest-asyncio
-
-pytest-postgresql
-psycopg2-binary
