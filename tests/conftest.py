@@ -3,6 +3,7 @@ from httpx import AsyncClient
 from fastapi import Depends
 from app.main import app
 
+
 # Фейковая сессия
 class FakeSession:
     def __init__(self):
@@ -10,7 +11,6 @@ class FakeSession:
         self.reservations = []
         self._table_id = 1
         self._res_id = 1
-
 
     async def add_table(self, data):
         table = data.model_dump()
@@ -30,7 +30,7 @@ class FakeSession:
         # Конфликт по времени
         for r in self.reservations:
             if r["table_id"] == data.table_id and not (
-                data.end_time <= r["start_time"] or data.start_time >= r["end_time"]
+                    data.end_time <= r["start_time"] or data.start_time >= r["end_time"]
             ):
                 raise Exception("This table is already reserved at this time.")
 

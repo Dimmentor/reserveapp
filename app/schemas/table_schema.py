@@ -2,8 +2,10 @@ from pydantic import BaseModel, ConfigDict
 
 
 class TableCreate(BaseModel):
-    table_number: int
-    capacity: int
+    name: str
+    seats: int
+    location: str
+
 
 class TableOut(TableCreate):
     id: int

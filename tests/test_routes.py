@@ -20,7 +20,6 @@ async def test_get_tables(fake_session):
     assert isinstance(tables, list)
 
 
-
 @pytest.mark.asyncio
 async def test_delete_table(fake_session):
     await fake_session.add_table(TableCreate(table_number=99, capacity=2))
@@ -42,7 +41,7 @@ async def test_create_reservation(fake_session):
 
 
 @pytest.mark.asyncio
-async def test_conflict_reservation(client, fake_session):
+async def test_conflict_reservation(fake_session):
     table = await fake_session.add_table(TableCreate(table_number=3, capacity=2))
     now = datetime.utcnow()
 
@@ -63,13 +62,13 @@ async def test_conflict_reservation(client, fake_session):
 
 
 @pytest.mark.asyncio
-async def test_get_reservations(client, fake_session):
+async def test_get_reservations(fake_session):
     res = await fake_session.get_reservations()
     assert isinstance(res, list)
 
 
 @pytest.mark.asyncio
-async def test_delete_reservation(client, fake_session):
+async def test_delete_reservation(fake_session):
     table = await fake_session.add_table(TableCreate(table_number=4, capacity=2))
     now = datetime.utcnow()
     res = await fake_session.add_reservation(

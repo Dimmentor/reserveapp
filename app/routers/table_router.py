@@ -15,6 +15,7 @@ async def get_tables(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Table))
     return result.scalars().all()
 
+
 @router.post("/", response_model=TableOut, status_code=status.HTTP_201_CREATED)
 async def create_table(data: TableCreate, session: AsyncSession = Depends(get_session)):
     table = Table(**data.dict())
@@ -22,6 +23,7 @@ async def create_table(data: TableCreate, session: AsyncSession = Depends(get_se
     await session.commit()
     await session.refresh(table)
     return table
+
 
 @router.delete("/{table_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_table(table_id: int, session: AsyncSession = Depends(get_session)):

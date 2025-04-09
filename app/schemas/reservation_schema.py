@@ -3,9 +3,11 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ReservationCreate(BaseModel):
+    customer_name: str
     table_id: int
-    start_time: datetime
-    end_time: datetime
+    reservation_time: datetime
+    duration_minutes: int
+
 
 class ReservationOut(ReservationCreate):
     id: int
