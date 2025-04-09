@@ -12,7 +12,7 @@ async def create_reservation(session: AsyncSession, data: ReservationCreate):
     stmt = select(Reservation).where(
         Reservation.table_id == data.table_id,
         Reservation.reservation_time < end_time,
-        (Reservation.reservation_time + timedelta(minutes=Reservation.duration_minutes)) > data.reservation_time,
+        Reservation.reservation_time + timedelta(minutes=data.duration_minutes) > data.reservation_time
     )
 
     result = await session.execute(stmt)
