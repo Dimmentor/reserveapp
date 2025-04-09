@@ -1,0 +1,12 @@
+fastapi
+pydantic
+asyncpg
+SQLAlchemy
+alembic
+pydantic_settings
+httpx
+pytest
+pytest-asyncio
+
+pytest-postgresql
+psycopg2-binary
