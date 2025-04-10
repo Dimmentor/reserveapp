@@ -2,7 +2,7 @@ import pytest_asyncio
 from httpx import AsyncClient
 from fastapi import Depends
 from app.main import app
-
+from datetime import timedelta
 
 # Фейковая сессия
 class FakeSession:
@@ -27,15 +27,22 @@ class FakeSession:
         self.reservations = [r for r in self.reservations if r["table_id"] != table_id]
 
     async def add_reservation(self, data):
-        # Конфликт по времени
+        # Вычисляем время начала и окончания
+        start_time = data.reservation_time
+        end_time = start_time + timedelta(minutes=data.duration_minutes)
+
+        # Проверка конфликта по времени
         for r in self.reservations:
             if r["table_id"] == data.table_id and not (
-                    data.end_time <= r["start_time"] or data.start_time >= r["end_time"]
+                    end_time <= r["reservation_time"] or start_time >= (
+                    r["reservation_time"] + timedelta(minutes=r["duration_minutes"]))
             ):
-                raise Exception("This table is already reserved at this time.")
+                raise Exception("Столик уже забронирован на это время.")
 
         reservation = data.model_dump()
         reservation["id"] = self._res_id
+        reservation["start_time"] = start_time  # Добавляем время начала
+        reservation["end_time"] = end_time  # Добавляем время окончания
         self._res_id += 1
         self.reservations.append(reservation)
         return reservation
