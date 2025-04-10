@@ -1,5 +1,8 @@
+import logging
 from fastapi import FastAPI
 from app.routers import table_router, reservation_router
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="ReserveApp")
 

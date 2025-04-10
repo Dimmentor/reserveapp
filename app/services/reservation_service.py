@@ -8,12 +8,10 @@ from datetime import timedelta
 
 
 async def create_reservation(session: AsyncSession, data: ReservationCreate):
-    # Проверяем, существует ли столик с указанным table_id
     table_stmt = select(Table).where(Table.id == data.table_id)
 
     result = await session.execute(table_stmt)
 
-    # Если столик не найден, выбрасываем исключение TableNotFoundException
     if not result.scalars().first():
         raise TableNotFoundException()
 
