@@ -29,6 +29,6 @@ async def create_table(data: TableCreate, session: AsyncSession = Depends(get_se
 async def delete_table(table_id: int, session: AsyncSession = Depends(get_session)):
     table = await session.get(Table, table_id)
     if not table:
-        raise HTTPException(status_code=404, detail="Table not found")
+        raise HTTPException(status_code=404, detail="Столика с таким id не существует")
     await session.delete(table)
     await session.commit()
