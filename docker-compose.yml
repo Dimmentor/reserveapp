@@ -2,13 +2,13 @@ services:
   reserveapp:
     build: .
     container_name: reserveapp
-    command: uvicorn app.main:app --port 5050
+    command: uvicorn app.main:app --host 0.0.0.0 --port 5050
     volumes:
       - .:/usr/src/app
     ports:
       - 5050:5050
     depends_on:
-      -   reserveappdb
+      - reserveappdb
 
   reserveappdb:
     image: postgres:17
@@ -21,7 +21,6 @@ services:
     volumes:
       - reserveappdbdata:/var/lib/postgresql/data/
 
-
   test_runner:
     build: .
     container_name: test_runner
@@ -31,5 +30,15 @@ services:
     depends_on:
       - reserveapp
       - reserveappdb
+
+#  migrate:
+#    build: .
+#    container_name: migrate
+#    command: alembic upgrade head
+#    volumes:
+#      - .:/usr/src/app
+#    depends_on:
+#      - reserveappdb
+
 volumes:
   reserveappdbdata: null

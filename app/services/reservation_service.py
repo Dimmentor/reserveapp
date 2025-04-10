@@ -1,12 +1,22 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.reservation import Reservation
+from app.models.table import Table
 from app.schemas.reservation_schema import ReservationCreate
-from app.utils.exceptions import ReservationConflictException
+from app.utils.exceptions import ReservationConflictException, TableNotFoundException
 from datetime import timedelta
 
 
 async def create_reservation(session: AsyncSession, data: ReservationCreate):
+    # Проверяем, существует ли столик с указанным table_id
+    table_stmt = select(Table).where(Table.id == data.table_id)
+
+    result = await session.execute(table_stmt)
+
+    # Если столик не найден, выбрасываем исключение TableNotFoundException
+    if not result.scalars().first():
+        raise TableNotFoundException()
+
     end_time = data.reservation_time + timedelta(minutes=data.duration_minutes)
 
     stmt = select(Reservation).where(
