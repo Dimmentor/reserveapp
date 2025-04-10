@@ -31,14 +31,14 @@ services:
       - reserveapp
       - reserveappdb
 
-#  migrate:
-#    build: .
-#    container_name: migrate
-#    command: alembic upgrade head
-#    volumes:
-#      - .:/usr/src/app
-#    depends_on:
-#      - reserveappdb
+  migrate:
+    build: .
+    container_name: migrate
+    command: alembic upgrade head
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - reserveappdb
 
 volumes:
   reserveappdbdata: null
